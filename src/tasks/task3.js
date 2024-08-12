@@ -6,13 +6,18 @@ import "../App.css";
 export const Title3 = () => {
     return (
       <div>
-        <b className="title">task 3</b>
-        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>calculating the low-ball and high-ball trajectories of an object passing through a fixed position, and the minimum speed required</p>
+        <b className="title">task 3 & 5</b>
+        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>calculating the bounding, minimum speed, maximum horizontal range (MHR), high-ball and low-ball trajectories of an object passing through a fixed position</p>
       </div> 
     );
 };
 
 const Task3 = (X, Y, g, u, h) => {
+
+    // define constants
+    const a = (g * X**2) / (2 * u**2);
+    const b = -X;
+    const c = Y - h + (g * X**2) / (2 * u**2);
 
     const x = (x_start, x_stop, x_card) => {
         let x_arr = [];
@@ -23,48 +28,59 @@ const Task3 = (X, Y, g, u, h) => {
         return x_arr;
     };
 
-    let x_arr = x(0, X, 200);
-
-    const a = (g * X**2) / (2 * u**2);
-    const b = -X;
-    const c = Y - h + (g * X**2) / (2 * u**2);
+    let R_max = (u**2 / g) * (1 + (2 * g * h / u**2))
+    let x_arr = x(0, R_max, 300);
 
     // high ball parabola
-    const a_max = Math.atan((-b + Math.sqrt(b**2 - 4 * a * c)) / (2 * a));
-    const y_max_arr = x_arr.map(x => h + x * Math.tan(a_max) - (g / (2 * (u**2))) * (1 + (Math.tan(a_max))**2) * (x**2));
+    let a_high = Math.atan((-b + Math.sqrt(b**2 - 4 * a * c)) / (2 * a));
+    let y_high = x_arr.map(x => h + x * Math.tan(a_high) - (g / (2 * (u**2))) * (1 + (Math.tan(a_high))**2) * (x**2));
 
     // low ball parabola
-    const a_min = Math.atan((-b - Math.sqrt(b**2 - 4 * a * c)) / (2 * a));
-    const y_min_arr = x_arr.map(x => h + x * Math.tan(a_min) - (g/(2 * (u**2))) * (1 + (Math.tan(a_min))**2) * (x**2));
+    let a_low = Math.atan((-b - Math.sqrt(b**2 - 4 * a * c)) / (2 * a));
+    let y_low = x_arr.map(x => h + x * Math.tan(a_low) - (g / (2 * (u**2))) * (1 + (Math.tan(a_low))**2) * (x**2));
+
+    // minimum speed (u) parabola
+    let a_umin = Math.atan((Y + Math.sqrt(X**2 + Y**2)) / (X));
+    let y_umin = x_arr.map(x => x * ((Y + Math.sqrt(X**2 + Y**2))/(X)) - (Math.sqrt(X**2 + Y**2)/(X**2))*(x**2));
+
+    // bounding parabola 
+    let y_bound = x_arr.map(x => (u**2) / (2 * g) - (g / (2 * u**2)) * (x**2));
+
+    // max range
+    let a_rmax = Math.asin( 1 / (Math.sqrt(2 + (2 * g * h) / u**2)))
+    let y_rmax = x_arr.map(x => h + x * Math.tan(a_rmax) - (g / (2 * (u**2))) * (1 + (Math.tan(a_rmax))**2) * (x**2));
 
     // lower bound for slider value
     const u_min = Math.ceil(Math.sqrt(g) * Math.sqrt(Y + Math.sqrt(X**2 + Y**2)))
 
-    return { x_arr, y_max_arr, y_min_arr, u_min, X, Y };
+    return { x_arr, y_high, y_low, y_umin, y_bound, y_rmax, u_min, X, Y }
+
 }
 
 const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
     return (
       <div className="slider-font">
-        <label>X COORDINATE (m): {sliderValues.X}</label>
+        <label>X COORDINATE: {sliderValues.x} m</label>
         <input
           type="range"
           min="0"
           max="1000"
-          value={sliderValues.X}
-          onChange={(e) => handleSliderChange('X', e.target.value)}
+          value={sliderValues.x}
+          onChange={(e) => handleSliderChange('x', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
-        <label>Y COORDINATE (m): {sliderValues.Y}</label>
+        <br /> 
+        <label>Y COORDINATE: {sliderValues.y} m</label>
         <input
           type="range"
           min="0"
           max="1000"
-          value={sliderValues.Y}
-          onChange={(e) => handleSliderChange('Y', e.target.value)}
+          value={sliderValues.y}
+          onChange={(e) => handleSliderChange('y', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
-        <label>GRAVITY (g): {sliderValues.g}</label>
+        <br /> 
+        <label>GRAVITY: {sliderValues.g} kgms^-2</label>
         <input
           type="range"
           min="0"
@@ -74,17 +90,17 @@ const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL SPEED (u): {sliderValues.u}</label>
+        <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
         <input
           type="range"
           min={u_min}
-          max="200"
+          max="300"
           value={sliderValues.u}
-          onChange={(e) => handleSliderChange('u', parseFloat(e.target.value))}
+          onChange={(e) => handleSliderChange('u', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+        <label>INITIAL HEIGHT: {sliderValues.h} m</label>
         <input
           type="range"
           min="0"
@@ -117,17 +133,37 @@ const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
                 },
                 {
                   label: 'High-ball Trajectory',
-                  data: data.x_arr.map((x, i) => ({ x, y: data.y_max_arr[i] })),
+                  data: data.x_arr.map((x, i) => ({ x, y: data.y_high[i]})),
                   backgroundColor: 'rgba(60, 94, 237, 1)',
                   pointRadius: 2, 
                   showLine: true,
-
                 },
                 {
                   label: 'Low-ball Trajectory',
-                  data: data.x_arr.map((x, i) => ({ x, y: data.y_min_arr[i]})),
+                  data: data.x_arr.map((x, i) => ({ x, y: data.y_low[i]})),
                   backgroundColor: 'rgba(255, 99, 132, 1)', 
                   pointRadius: 2, 
+                  showLine: true,
+                },
+                {
+                  label: 'Minimum Speed Trajectory',
+                  data: data.x_arr.map((x, i) => ({ x, y: data.y_umin[i]})),
+                  backgroundColor: 'rgba(191, 0, 191, 1)',
+                  pointRadius: '2', 
+                  showLine: true,
+                },
+                {
+                  label: 'Bounding Trajectory',
+                  data: data.x_arr.map((x, i) => ({ x, y: data.y_bound[i]})),
+                  backgroundColor: 'rgba(191, 191, 0, 1)',
+                  pointRadius: '2', 
+                  showLine: true,
+                },
+                {
+                  label: 'MHR Trajectory',
+                  data: data.x_arr.map((x, i) => ({ x, y: data.y_rmax[i]})),
+                  backgroundColor: 'rgba(0, 191, 191  , 1)',
+                  pointRadius: '2', 
                   showLine: true,
                 }
               ]
@@ -169,12 +205,11 @@ const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
     }
   }
   
-  
   class Route3 extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        sliderValues: { X: 1000, Y: 300, g: 9.81, u: 150, h: 0},
+        sliderValues: { x: 1000, y: 300, g: 9.81, u: 150, h: 0 },
       };
     }
   
@@ -189,16 +224,16 @@ const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
   
     render() {
       const { sliderValues } = this.state;
-      const { x_arr, y_max_arr, y_min_arr, u_min, X, Y } = Task3(sliderValues.X, sliderValues.Y, sliderValues.g, sliderValues.u, sliderValues.h);
+      const { x_arr, y_high, y_low, y_umin, y_bound, y_rmax, u_min, X, Y } = Task3(sliderValues.x, sliderValues.y, sliderValues.g, sliderValues.u, sliderValues.h);
   
       return (
         <div className="wrapper">
           <div className='row'>
             <div className='column'>
-              <Chart3 data={{ x_arr, y_max_arr, y_min_arr, X, Y }} />
+              <Chart3 data={{ x_arr, y_high, y_low, y_umin, y_bound, y_rmax, X, Y }} />
             </div>
             <div className='column'>
-              <Slider3 sliderValues={sliderValues} handleSliderChange={this.handleSliderChange} u_min ={u_min} className='slider'/>
+              <Slider3 sliderValues={sliderValues} handleSliderChange={this.handleSliderChange} u_min={u_min} className='slider'/>
             </div>
           </div>
         </div>
@@ -206,5 +241,5 @@ const Slider3 = ({ sliderValues, handleSliderChange, u_min }) => {
     }
   }
   
-  export default Route3;
+export default Route3;
   

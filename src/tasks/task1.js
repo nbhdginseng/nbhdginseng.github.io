@@ -12,7 +12,7 @@ export const Title1 = () => {
   );
 };
 
-const Task1 = (deg, g, u, h) => {
+export const Task1 = (deg, g, u, h) => {
   const rad = deg * (Math.PI / 180);
   const ux = u * Math.cos(rad);
   const uy = u * Math.sin(rad);
@@ -28,19 +28,20 @@ const Task1 = (deg, g, u, h) => {
 
   let t_arr = t(0, 10, 400);
 
-  const vx = ux;
+  let vx_arr = t_arr.map(t => ux + t*0)
   let vy_arr = t_arr.map(t => uy - g * t);
+  const v_arr = vy_arr.map(vy => Math.sqrt(ux ** 2 + vy ** 2));
 
-  let x_arr = t_arr.map(t => vx * t)
+  let x_arr = t_arr.map(t => ux * t)
   let y_arr = t_arr.map(t => h + uy * t - 0.5 * g * t ** 2)
 
-  return { x_arr, y_arr };
+  return { x_arr, y_arr, t_arr, vx_arr, vy_arr, v_arr};
 };
 
 const Slider1 = ({ sliderValues, handleSliderChange }) => {
   return (
     <div className="slider-font">
-      <label>ANGLE (θ): {sliderValues.deg}</label>
+      <label>ANGLE: {sliderValues.deg} °</label>
       <input
         type="range"
         min="0"
@@ -49,17 +50,17 @@ const Slider1 = ({ sliderValues, handleSliderChange }) => {
         onChange={(e) => handleSliderChange('deg', e.target.value)}
         style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
       />
-      <label>GRAVITY (g): {sliderValues.g}</label>
+      <label>GRAVITY: {sliderValues.g} kgms^-2</label>
       <input
         type="range"
         min="0"
-        max="100"
+        max="20"
         value={sliderValues.g}
         onChange={(e) => handleSliderChange('g', e.target.value)}
         style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
       />
       <br />
-      <label>INITIAL SPEED (u): {sliderValues.u}</label>
+      <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
       <input
         type="range"
         min="0"
@@ -69,7 +70,7 @@ const Slider1 = ({ sliderValues, handleSliderChange }) => {
         style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
       />
       <br />
-      <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+      <label>INITIAL HEIGHT: {sliderValues.h} m</label>
       <input
         type="range"
         min="0"

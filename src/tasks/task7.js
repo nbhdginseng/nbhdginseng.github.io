@@ -7,69 +7,73 @@ export const Title7 = () => {
   return (
     <div>
       <b className="title">task 7</b>
-      <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>creating a graph of local maxima and minima of projectile ranges</p>
+      <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>calculating the local maxima and minima of variations in projectile trajectory ranges</p>
     </div> 
   );
 };
 
 const Task7 = (g, u) => {
-  const angles = [Math.PI / 6, Math.PI / 4, Math.PI / 3, (70.5 * Math.PI) / 180, (78 * Math.PI) / 180, (85 * Math.PI) / 180];
-  const dt = 0.005;
 
-  const result = angles.map(angle => {
-      const sin_angle = Math.sin(angle);
-      const cos_angle = Math.cos(angle);
+  // define constants
+  let angles = [Math.PI / 6, Math.PI / 4, Math.PI / 3, (70.5 * Math.PI) / 180, (78 * Math.PI) / 180, (85 * Math.PI) / 180];
 
-      let x_arr = [0];
-      let y_arr = [0];
-      let t_arr = [0];
-      let r_arr = [];
-
-      let t = 0;
-      let x = 0;
-      let y = 0;
-
-      while (y >= -5) {
-          x = u * t * cos_angle;
-          y = u * t * sin_angle - (g * t**2) / 2;
-
-          x_arr.push(x);
-          y_arr.push(y);
-          r_arr.push(Math.sqrt(u**2 * t**2 - g * t**3 * u * sin_angle + (g**2 * t**4) / 4));
-          t_arr.push(t);
-
-          t += dt;
+  const t = (t_start, t_stop, t_card) => {
+      let t_arr = [];
+      let t_step = (t_stop - t_start) / (t_card - 1);
+      for (let i = 0; i < t_card; i++) {
+          t_arr.push(t_start + (t_step * i));
       }
+      return t_arr;
+  };
 
-      const x_max = [];
-      const x_min = [];
-      const y_max = [];
-      const y_min = [];
-      const r_max = [];
-      const r_min = [];
-      const t_max = [];
-      const t_min = [];
+  let t_arr = t(0, 2.5, 500);
 
-      if (sin_angle >= (2 * Math.sqrt(2)) / 3) {
-          const t_max_val = ((3 * u) / (2 * g)) * (sin_angle + Math.sqrt(sin_angle**2 - 8 / 9));
-          const t_min_val = ((3 * u) / (2 * g)) * (sin_angle - Math.sqrt(sin_angle**2 - 8 / 9));
+  let result = angles.map((angle => {
+    let sin_angle = Math.sin(angle);
+    let cos_angle = Math.cos(angle);
+    
+    // initialise arrays
+    let x_arr = [];
+    let x_max = [];
+    let x_min = [];
+    
+    let y_arr = [];
+    let y_max = [];
+    let y_min = [];
+    
+    let t_max = [];
+    let t_min = [];
+    
+    let r_arr = [];
+    let r_max = [];
+    let r_min = [];
 
-          t_max.push(t_max_val);
-          t_min.push(t_min_val);
+    for (let t_val of t_arr) {
+        r_arr.push(Math.sqrt(u**2 * t_val**2 - g * t_val**3 * u * sin_angle + (g**2 * t_val**4) / 4));
+        x_arr.push(u * t_val * cos_angle);
+        y_arr.push(u * t_val * sin_angle - (g * t_val**2) / 2);
+    }
 
-          r_max.push(Math.sqrt(u**2 * t_max_val**2 - g * t_max_val**3 * u * sin_angle + (g**2 * t_max_val**4) / 4));
-          r_min.push(Math.sqrt(u**2 * t_min_val**2 - g * t_min_val**3 * u * sin_angle + (g**2 * t_min_val**4) / 4));
+    if (sin_angle >= (2 * Math.sqrt(2)) / 3) {
+      let t_max_val = ((3 * u) / (2 * g)) * (sin_angle + Math.sqrt(sin_angle**2 - 8 / 9));
+      let t_min_val = ((3 * u) / (2 * g)) * (sin_angle - Math.sqrt(sin_angle**2 - 8 / 9));
 
-          x_max.push(u * t_max_val * cos_angle);
-          x_min.push(u * t_min_val * cos_angle);
+      t_max.push(t_max_val);
+      t_min.push(t_min_val);
 
-          y_max.push(u * t_max_val * sin_angle - (g * t_max_val**2) / 2);
-          y_min.push(u * t_min_val * sin_angle - (g * t_min_val**2) / 2);
-      }
+      r_max.push(Math.sqrt(u**2 * t_max_val**2 - g * t_max_val**3 * u * sin_angle + (g**2 * t_max_val**4) / 4));
+      r_min.push(Math.sqrt(u**2 * t_min_val**2 - g * t_min_val**3 * u * sin_angle + (g**2 * t_min_val**4) / 4));
+
+      x_max.push(u * t_max_val * cos_angle);
+      x_min.push(u * t_min_val * cos_angle);
+
+      y_max.push(u * t_max_val * sin_angle - (g * t_max_val**2) / 2);
+      y_min.push(u * t_min_val * sin_angle - (g * t_min_val**2) / 2);
+    }
 
     return { angle, x_arr, x_max, x_min, y_arr, y_max, y_min, t_arr, t_max, t_min, r_arr, r_max, r_min };
 
-});
+}));
 
 return result;
 
@@ -78,17 +82,17 @@ return result;
 const Slider7 = ({ sliderValues, handleSliderChange }) => {
   return (
     <div className="slider-font">
-      <label>GRAVITY (g): {sliderValues.g}</label>
+      <label>GRAVITY: {sliderValues.g} kgms^-2</label>
       <input
         type="range"
         min="0"
-        max="100"
+        max="20"
         value={sliderValues.g}
         onChange={(e) => handleSliderChange('g', e.target.value)}
         style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
       />
       <br /> 
-      <label>INITIAL SPEED (u): {sliderValues.u}</label>
+      <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
       <input
         type="range"
         min="0"
@@ -125,6 +129,7 @@ class Chart7 extends Component {
     
     const dataset1_1 = data.flatMap((result, index) => [
       ...result.x_max.map((x, i) => ({
+        label: 'Minimum',
         data: [{ x, y: result.y_max[i] }],
         pointBorderColor: 'rgba(0,0,0,1)',
         pointStyle: 'star',
@@ -133,6 +138,7 @@ class Chart7 extends Component {
       })),
 
       ...result.x_min.map((x, i) => ({
+        label: 'Maximum',
         data: [{ x, y: result.y_min[i] }],
         pointBorderColor: 'rgba(255,0,255,1)',
         pointStyle: 'star',
@@ -153,6 +159,7 @@ class Chart7 extends Component {
 
     const dataset2_1 = data.flatMap((result, index) => [
       ...result.t_max.map((x, i) => ({
+        label: 'Minimum',
         data: [{ x, y: result.r_max[i] }],
         pointBorderColor: 'rgba(0,0,0,1)',
         pointStyle: 'star',
@@ -161,6 +168,7 @@ class Chart7 extends Component {
       })),
 
       ...result.t_min.map((x, i) => ({
+        label: 'Maximum',
         data: [{ x, y: result.r_min[i] }],
         pointBorderColor: 'rgba(255,0,255,1)',
         pointStyle: 'star',

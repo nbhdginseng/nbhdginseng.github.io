@@ -42,7 +42,7 @@ const Task2 = (deg, g, u, h) => {
 const Slider2 = ({ sliderValues, handleSliderChange }) => {
     return (
       <div className="slider-font">
-        <label>ANGLE (θ): {sliderValues.deg}</label>
+        <label>ANGLE: {sliderValues.deg} °</label>
         <input
           type="range"
           min="0"
@@ -51,17 +51,17 @@ const Slider2 = ({ sliderValues, handleSliderChange }) => {
           onChange={(e) => handleSliderChange('deg', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
-        <label>GRAVITY (g): {sliderValues.g}</label>
+        <label>GRAVITY: {sliderValues.g} kgms^-2</label>
         <input
           type="range"
           min="0"
-          max="100"
+          max="20"
           value={sliderValues.g}
           onChange={(e) => handleSliderChange('g', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL SPEED (u): {sliderValues.u}</label>
+        <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
         <input
           type="range"
           min="0"
@@ -71,7 +71,7 @@ const Slider2 = ({ sliderValues, handleSliderChange }) => {
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+        <label>INITIAL HEIGHT: {sliderValues.h} m</label>
         <input
           type="range"
           min="0"

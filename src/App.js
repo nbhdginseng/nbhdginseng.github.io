@@ -7,7 +7,6 @@ import Route1, { Title1 } from "./tasks/task1";
 import Route2, { Title2 } from "./tasks/task2";
 import Route3, { Title3 } from "./tasks/task3";
 import Route4, { Title4 } from "./tasks/task4";
-import Route5, { Title5 } from "./tasks/task5";
 import Route7, { Title7 } from "./tasks/task7";
 import Route8, { Title8 } from "./tasks/task8";
 import Route9, { Title9 } from "./tasks/task9";
@@ -30,7 +29,6 @@ const App = () => {
               <Button2 />
               <Button3 />
               <Button4 />
-              <Button5 />
               <Button7 />
               <Button8 />
               <Button9 />
@@ -45,7 +43,6 @@ const App = () => {
             <Route path="/route2" element={<Title2 />} />
             <Route path="/route3" element={<Title3 />} />
             <Route path="/route4" element={<Title4 />} />
-            <Route path="/route5" element={<Title5 />} />
             <Route path="/route7" element={<Title7 />} />
             <Route path="/route8" element={<Title8 />} />
             <Route path="/route9" element={<Title9 />} />
@@ -60,7 +57,6 @@ const App = () => {
           <Route path="/route2" element={<Route2 />} />
           <Route path="/route3" element={<Route3 />} />
           <Route path="/route4" element={<Route4 />} />
-          <Route path="/route5" element={<Route5 />} />
           <Route path="/route7" element={<Route7 />} />
           <Route path="/route8" element={<Route8 />} />
           <Route path="/route9" element={<Route9 />} />
@@ -97,7 +93,7 @@ const Button3 = () => {
     navigate('/route3'); 
   };
 
-  return <button className='button1' onClick={handleClick}>3</button>; 
+  return <button className='button2' onClick={handleClick}>3, 5</button>; 
 };
 
 const Button4 = () => {
@@ -107,17 +103,7 @@ const Button4 = () => {
     navigate('/route4'); 
   };
 
-  return <button className='button2' onClick={handleClick}>4 & 6</button>; 
-};
-
-const Button5 = () => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/route5'); 
-  };
-
-  return <button className='button1' onClick={handleClick}>5</button>; 
+  return <button className='button2' onClick={handleClick}>4, 6</button>; 
 };
 
 const Button7 = () => {

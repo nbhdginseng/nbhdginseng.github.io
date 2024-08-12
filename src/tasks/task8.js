@@ -7,12 +7,12 @@ export const Title8 = () => {
     return (
       <div>
         <b className="title">task 8</b>
-        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>using a numerical method to compute a projectile trajectory, including the possibility of a bounce</p>
+        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>using a numerical method to compute projectile trajectory, including the possibility of a bounce</p>
       </div> 
     );
 };
 
-const Task8 = (u, C, theta, h, g) => {
+const Task8 = (u, C, theta, h, g, N) => {
     // initialise arrays
     let x = [];
     let y = [];
@@ -20,7 +20,6 @@ const Task8 = (u, C, theta, h, g) => {
     let t = 0;
     const dt = 0.005;
 
-    const N = 6;
     let Nbounce = 1;
 
     let vx = u * Math.cos(theta * (Math.PI / 180));
@@ -54,7 +53,7 @@ const Task8 = (u, C, theta, h, g) => {
 const Slider8 = ({ sliderValues, handleSliderChange }) => {
     return (
         <div className="slider-font">
-            <label>INITIAL SPEED (u): {sliderValues.u}</label>
+            <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
             <input
             type="range"
             min="0"
@@ -64,7 +63,7 @@ const Slider8 = ({ sliderValues, handleSliderChange }) => {
             style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
             />
             <br /> 
-            <label>COEFFICIENT OF RESTITUTION (C): {sliderValues.C}</label>
+            <label>COEFFICIENT OF RESTITUTION: {sliderValues.C} </label>
             <input
             type="range"
             min="0"
@@ -75,7 +74,7 @@ const Slider8 = ({ sliderValues, handleSliderChange }) => {
             style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
             />
             <br /> 
-            <label>ANGLE (θ): {sliderValues.theta}</label>
+            <label>ANGLE: {sliderValues.theta} °</label>
             <input
             type="range"
             min="0"
@@ -85,7 +84,7 @@ const Slider8 = ({ sliderValues, handleSliderChange }) => {
             style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
             />
             <br /> 
-            <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+            <label>INITIAL HEIGHT: {sliderValues.h} m</label>
             <input
             type="range"
             min="0"
@@ -95,13 +94,23 @@ const Slider8 = ({ sliderValues, handleSliderChange }) => {
             style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
             />
             <br /> 
-            <label>GRAVITY (g): {sliderValues.g}</label>
+            <label>GRAVITY: {sliderValues.g} kgms^-2</label>
             <input
             type="range"
             min="0"
-            max="100"
+            max="20"
             value={sliderValues.g}
             onChange={(e) => handleSliderChange('g', e.target.value)}
+            style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
+            />
+            <br /> 
+            <label>NUMBER OF BOUNCES: {sliderValues.N}</label>
+            <input
+            type="range"
+            min="0"
+            max="20"
+            value={sliderValues.N}
+            onChange={(e) => handleSliderChange('N', e.target.value)}
             style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
             />
         </div>
@@ -169,7 +178,7 @@ class Route8 extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        sliderValues: { u: 5, C: 0.7, theta: 45, h: 10, g: 9.81 },
+        sliderValues: { u: 5, C: 0.7, theta: 45, h: 10, g: 9.81, N: 6 },
       };
     }
   
@@ -184,7 +193,7 @@ class Route8 extends Component {
   
     render() {
       const { sliderValues } = this.state;
-      const data = Task8(sliderValues.u, sliderValues.C, sliderValues.theta, sliderValues.h, sliderValues.g);
+      const data = Task8(sliderValues.u, sliderValues.C, sliderValues.theta, sliderValues.h, sliderValues.g, sliderValues.N);
   
       return (
         <div className="wrapper">

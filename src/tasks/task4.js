@@ -79,7 +79,7 @@ const Task4 = (deg, g, u, h) => {
 const Slider4 = ({ sliderValues, handleSliderChange }) => {
     return (
       <div className="slider-font">
-        <label>ANGLE (θ): {sliderValues.deg}</label>
+        <label>ANGLE: {sliderValues.deg} °</label>
         <input
           type="range"
           min="0"
@@ -88,17 +88,17 @@ const Slider4 = ({ sliderValues, handleSliderChange }) => {
           onChange={(e) => handleSliderChange('deg', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
-        <label>GRAVITY (g): {sliderValues.g}</label>
+        <label>GRAVITY: {sliderValues.g} kgms^-2</label>
         <input
           type="range"
           min="0"
-          max="100"
+          max="20"
           value={sliderValues.g}
           onChange={(e) => handleSliderChange('g', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL SPEED (u): {sliderValues.u}</label>
+        <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
         <input
           type="range"
           min="0"
@@ -108,7 +108,7 @@ const Slider4 = ({ sliderValues, handleSliderChange }) => {
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+        <label>INITIAL HEIGHT: {sliderValues.h} m</label>
         <input
           type="range"
           min="0"
@@ -139,6 +139,13 @@ const Slider4 = ({ sliderValues, handleSliderChange }) => {
                     showLine: true,
                 },
                 {
+                  label: 'CT Apogee',
+                  data: [{ x: data.xa, y: data.ya }],
+                  pointBorderColor: 'rgba(60, 94, 237, 1)',
+                  pointStyle: 'star',
+                  pointRadius: 7
+                },
+                {
                     label: 'Maximum Horizontal Range Trajectory',
                     data: data.x_max_arr.map((x, i) => ({ x, y: data.y_max_arr[i] })),
                     backgroundColor: 'rgba(255, 99, 132, 1)',
@@ -146,14 +153,7 @@ const Slider4 = ({ sliderValues, handleSliderChange }) => {
                     showLine: true,
                 },
                 {
-                    label: 'Apogee',
-                    data: [{ x: data.xa, y: data.ya }],
-                    pointBorderColor: 'rgba(60, 94, 237, 1)',
-                    pointStyle: 'star',
-                    pointRadius: 7
-                },
-                {
-                    label: 'Apogee',
+                    label: 'MHRT Apogee',
                     data: [{ x: data.xa_max, y: data.ya_max }],
                     pointBorderColor: 'rgba(255, 99, 132, 1)',
                     pointStyle: 'star',
@@ -226,11 +226,12 @@ const Slider4 = ({ sliderValues, handleSliderChange }) => {
           <div className='row'>
             <div className='column'>
               <Chart4 data={{ x_arr, y_arr, x_max_arr, y_max_arr, xa, ya, xa_max, ya_max, s, s_max }} />
-              <br />
-              <b style={{color: 'rgba(4, 71, 131, 1)'}}>RANGE (CONFIGURED TRAJECTORY) {s.toFixed(2)} m</b>
-              <b style={{color: 'rgba(4, 71, 131, 1)'}}>RANGE (MAXIMISED TRAJECTORY) {s_max.toFixed(2)} m</b>
             </div>
             <div className='column'>
+              <b style={{color: 'rgba(60, 94, 237, 1)'}}>DISTANCE TRAVELLED (CT): {s.toFixed(2)} m</b>
+              <b style={{color: 'rgba(255, 99, 132, 1)'}}>DISTANCE TRAVELLED (MHRT): {s_max.toFixed(2)} m</b>
+              <br />
+              <br />
               <Slider4 sliderValues={sliderValues} handleSliderChange={this.handleSliderChange} className='slider'/>
             </div>
           </div>

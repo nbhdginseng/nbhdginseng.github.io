@@ -2,51 +2,52 @@ import React, { Component } from "react";
 import { Scatter } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
+import { Task1 } from "./task1";
 
 export const Title9 = () => (
     <div>
         <b className="title">task 9</b>
-        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>creating a simple, drag-free projectile motion model that accounts for air resistance</p>
+        <p style={{ color: 'rgb(255, 255, 255)', fontSize: '16px', fontFamily: 'Lexend' }}>creating simple, drag-free projectile motion models that account for air resistance</p>
     </div>
 );
 
 const Task9 = (deg, g, u, h, c, rho, a, m) => {
-    const rad = deg * (Math.PI / 180);
-    let dt = 0.01;
-    const k = (0.5 * c * rho * a) / m;
+  const rad = deg * (Math.PI / 180);
+  let dt = 0.01;
+  const k = (0.5 * c * rho * a) / m;
 
-    const x = [0];
-    const y = [h];
-    const t = [0];
-    const vx = [u * Math.cos(rad)];
-    const vy = [u * Math.sin(rad)];
-    const v = [Math.sqrt(vx[0] ** 2 + vy[0] ** 2)];
+  const x = [0];
+  const y = [h];
+  const t = [0];
+  const vx = [u * Math.cos(rad)];
+  const vy = [u * Math.sin(rad)];
+  const v = [Math.sqrt(vx[0] ** 2 + vy[0] ** 2)];
 
-    while (y[y.length - 1] >= 0) {
-        let ax = -k * v[v.length - 1] * vx[v.length - 1];
-        let ay = -g - k * v[v.length - 1] * vy[v.length - 1];
+  while (y[y.length - 1] >= 0) {
+      let ax = -k * vx[vx.length - 1] * v[v.length - 1];
+      let ay = -g - k * vy[vy.length - 1] * v[v.length - 1];
 
-        let vx_next = vx[vx.length - 1] + ax * dt;
-        let vy_next = vy[vy.length - 1] + ay * dt;
-        let v_next = Math.sqrt(vx_next ** 2 + vy_next ** 2);
+      let vx_next = vx[vx.length - 1] + ax * dt;
+      let vy_next = vy[vy.length - 1] + ay * dt;
+      let v_next = Math.sqrt(vx_next ** 2 + vy_next ** 2);
 
-        let x_next = x[x.length - 1] + vx[vx.length - 1] * dt;
-        let y_next = y[y.length - 1] + vy[vy.length - 1] * dt;
+      let x_next = x[x.length - 1] + vx[vx.length - 1] * dt;
+      let y_next = y[y.length - 1] + vy[vy.length - 1] * dt;
 
-        vx.push(vx_next);
-        vy.push(vy_next);
-        v.push(v_next);
-        x.push(x_next);
-        y.push(y_next);
-        t.push(t[t.length - 1] + dt);
-    }
+      vx.push(vx_next);
+      vy.push(vy_next);
+      v.push(v_next);
+      x.push(x_next);
+      y.push(y_next);
+      t.push(t[t.length - 1] + dt);
+  }
 
     return { x, y, t, vx, vy, v };
 };
 
 const Slider9 = ({ sliderValues, handleSliderChange }) => (
     <div className="slider-font">
-        <label>ANGLE (θ): {sliderValues.deg}</label>
+        <label>ANGLE: {sliderValues.deg} °</label>
         <input
           type="range"
           min="0"
@@ -56,31 +57,31 @@ const Slider9 = ({ sliderValues, handleSliderChange }) => (
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>GRAVITY (g): {sliderValues.g}</label>
+        <label>GRAVITY: {sliderValues.g} kgms^-2</label>
         <input
           type="range"
           min="0"
-          max="100"
+          max="20"
           value={sliderValues.g}
           onChange={(e) => handleSliderChange('g', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL SPEED (u): {sliderValues.u}</label>
+        <label>INITIAL SPEED: {sliderValues.u} ms^-1</label>
         <input
           type="range"
           min="0"
-          max="20"
+          max="100"
           value={sliderValues.u}
           onChange={(e) => handleSliderChange('u', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>INITIAL HEIGHT (h): {sliderValues.h}</label>
+        <label>INITIAL HEIGHT: {sliderValues.h} m</label>
         <input
           type="range"
           min="0"
-          max="200"
+          max="100"
           value={sliderValues.h}
           onChange={(e) => handleSliderChange('h', parseFloat(e.target.value))}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
@@ -96,7 +97,7 @@ const Slider9 = ({ sliderValues, handleSliderChange }) => (
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>AIR DENSITY (ρ): {sliderValues.rho}</label>
+        <label>AIR DENSITY: {sliderValues.rho} kgm−3</label>
         <input
           type="range"
           min="0"
@@ -106,7 +107,7 @@ const Slider9 = ({ sliderValues, handleSliderChange }) => (
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>CROSS-SECTIONAL AREA (A): {sliderValues.a}</label>
+        <label>CROSS-SECTIONAL AREA: {sliderValues.a} m^2</label>
         <input
           type="range"
           min="0"
@@ -117,11 +118,12 @@ const Slider9 = ({ sliderValues, handleSliderChange }) => (
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
         />
         <br /> 
-        <label>MASS (m): {sliderValues.m}</label>
+        <label>MASS: {sliderValues.m} kg</label>
         <input
           type="range"
           min="0"
-          max="100"
+          max="1"
+          step="0.01"
           value={sliderValues.m}
           onChange={(e) => handleSliderChange('m', e.target.value)}
           style={{ height: '50px', backgroundColor: 'rgb(240, 241, 245)', borderRadius: '25px' }}
@@ -132,6 +134,7 @@ const Slider9 = ({ sliderValues, handleSliderChange }) => (
 class Chart9 extends Component {
     render() {
     const { data } = this.props;
+    const [data1, data2] = data;
 
     return (
         <div>
@@ -140,13 +143,74 @@ class Chart9 extends Component {
                 height={550}
                 data={{
                     datasets: [
-                        {
-                            label: 'Configured Trajectory',
-                            data: data.x.map((x, i) => ({ x, y: data.y[i] })),
-                            backgroundColor: 'rgba(60, 94, 237, 1)',
-                            pointRadius: 2,
-                            showLine: true,
+                      {
+                        label: 'No Air Resistance',
+                        data: data2.x_arr.map((x, i) => ({ x, y: data2.y_arr[i] })),
+                        backgroundColor: 'rgba(60, 94, 237, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      },
+                      {
+                        label: 'Air Resistance',
+                        data: data1.x.map((x, i) => ({ x, y: data1.y[i] })),
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      }
+                    ]
+                }}
+                options={{
+                    scales: {
+                        x: {
+                            min: 0,
+                            title: {
+                                display: true,
+                                text: 'x/ m'
+                            },
+                        },
+                        y: {
+                            min: 0,
+                            title: {
+                                display: true,
+                                text: 'y/ m'
+                            },
                         }
+                    },
+
+                    plugins: {
+                        legend: {
+                          display: true,
+                          position: "right",
+                          align: "center",
+                          labels: {
+                            usePointStyle: true,
+                            color: "#006192",
+                            borderRadius: 0
+                          }
+                        }
+                      }
+                }}
+            />
+            <Scatter
+                width={825}
+                height={550}
+                data={{
+                    datasets: [
+                      {
+                        label: 'No Air Resistance',
+                        data: data2.t_arr.map((x, i) => ({ x, y: data2.y_arr[i] })),
+                        backgroundColor: 'rgba(60, 94, 237, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      },
+                      {
+                        label: 'Air Resistance',
+                        data: data1.t.map((x, i) => ({ x, y: data1.y[i] })),
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      }
+                        
                     ]
                 }}
                 options={{
@@ -186,29 +250,37 @@ class Chart9 extends Component {
                 height={550}
                 data={{
                     datasets: [
-                        {
-                            label: 'Configured Trajectory',
-                            data: data.t.map((x, i) => ({ x, y: data.y[i] })),
-                            backgroundColor: 'rgba(60, 94, 237, 1)',
-                            pointRadius: 2,
-                            showLine: true,
-                        }
+                      {
+                        label: 'No Air Resistance',
+                        data: data2.t_arr.map((x, i) => ({ x, y: data2.vx_arr[i] })),
+                        backgroundColor: 'rgba(60, 94, 237, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      },
+                      {
+                        label: 'Air Resistance',
+                        data: data1.t.map((x, i) => ({ x, y: data1.vx[i] })),
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      }
                     ]
                 }}
                 options={{
                     scales: {
                         x: {
                             min: 0,
+                            max: 5,
                             title: {
                                 display: true,
-                                text: 'vx/ ms'
+                                text: 't/ s'
                             },
                         },
                         y: {
                             min: 0,
                             title: {
                                 display: true,
-                                text: 'y/ m'
+                                text: 'vx/ ms^-1'
                             },
                         }
                     },
@@ -232,13 +304,20 @@ class Chart9 extends Component {
                 height={550}
                 data={{
                     datasets: [
-                        {
-                            label: 'Configured Trajectory',
-                            data: data.vx.map((x, i) => ({ x, y: data.y[i] })),
-                            backgroundColor: 'rgba(60, 94, 237, 1)',
-                            pointRadius: 2,
-                            showLine: true,
-                        }
+                      {
+                        label: 'No Air Resistance',
+                        data: data2.t_arr.map((x, i) => ({ x, y: data2.vy_arr[i] })),
+                        backgroundColor: 'rgba(60, 94, 237, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      },
+                      {
+                        label: 'Air Resistance',
+                        data: data1.t.map((x, i) => ({ x, y: data1.vy[i] })),
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      }
                     ]
                 }}
                 options={{
@@ -247,14 +326,14 @@ class Chart9 extends Component {
                             min: 0,
                             title: {
                                 display: true,
-                                text: 'vy/ ms'
+                                text: 't/ s'
                             },
                         },
                         y: {
-                            min: 0,
+                            min: -15,
                             title: {
                                 display: true,
-                                text: 'y/ m'
+                                text: 'vy/ ms^-1'
                             },
                         }
                     },
@@ -278,75 +357,37 @@ class Chart9 extends Component {
                 height={550}
                 data={{
                     datasets: [
-                        {
-                            label: 'Configured Trajectory',
-                            data: data.vy.map((x, i) => ({ x, y: data.y[i] })),
-                            backgroundColor: 'rgba(60, 94, 237, 1)',
-                            pointRadius: 2,
-                            showLine: true,
-                        }
-                    ]
-                }}
-                options={{
-                    scales: {
-                        x: {
-                            min: 0,
-                            title: {
-                                display: true,
-                                text: 'x/ m'
-                            },
-                        },
-                        y: {
-                            min: 0,
-                            title: {
-                                display: true,
-                                text: 'v/ ms'
-                            },
-                        }
-                    },
-
-                    plugins: {
-                        legend: {
-                          display: true,
-                          position: "right",
-                          align: "center",
-                          labels: {
-                            usePointStyle: true,
-                            color: "#006192",
-                            borderRadius: 0
-                          }
-                        }
+                      {
+                        label: 'No Air Resistance',
+                        data: data2.t_arr.map((x, i) => ({ x, y: data2.v_arr[i] })),
+                        backgroundColor: 'rgba(60, 94, 237, 1)',
+                        pointRadius: 2,
+                        showLine: true,
+                      },
+                      {
+                        label: 'Air Resistance',
+                        data: data1.t.map((x, i) => ({ x, y: data1.v[i] })),
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 2,
+                        showLine: true,
                       }
-                }}
-            />
-            <Scatter
-                width={825}
-                height={550}
-                data={{
-                    datasets: [
-                        {
-                            label: 'Configured Trajectory',
-                            data: data.v.map((x, i) => ({ x, y: data.y[i] })),
-                            backgroundColor: 'rgba(60, 94, 237, 1)',
-                            pointRadius: 2,
-                            showLine: true,
-                        }
                     ]
                 }}
                 options={{
                     scales: {
                         x: {
                             min: 0,
+                            max: 5,
                             title: {
                                 display: true,
-                                text: 'x/ m'
+                                text: 't/ s'
                             },
                         },
                         y: {
                             min: 0,
                             title: {
                                 display: true,
-                                text: 'y/ m'
+                                text: 'v/ ms^-1'
                             },
                         }
                     },
@@ -389,8 +430,11 @@ class Route9 extends Component {
   
     render() {
       const { sliderValues } = this.state;
-      const data = Task9(sliderValues.deg, sliderValues.g, sliderValues.u, sliderValues.h, sliderValues.c, sliderValues.rho, sliderValues.a, sliderValues.m);
-  
+      const data1 = Task9(sliderValues.deg, sliderValues.g, sliderValues.u, sliderValues.h, sliderValues.c, sliderValues.rho, sliderValues.a, sliderValues.m);
+      const data2 = Task1(sliderValues.deg, sliderValues.g, sliderValues.u, sliderValues.h);
+      const data = [data1, data2];
+
+
       return (
         <div className="wrapper">
           <div className='row'>

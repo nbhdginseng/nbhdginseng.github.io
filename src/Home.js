@@ -19,7 +19,7 @@ class Home extends Component {
         <br />
 
         <row>
-          <p style={{ textAlign: "center" }}>This web application was made with</p>
+          <p style={{ textAlign: "center" }}>This web application was made with:</p>
         </row>
 
         <br />
@@ -29,12 +29,15 @@ class Home extends Component {
         <div className="logo-container" >
           <div className="logo-item">
             <b>NODE.JS</b>
+            <br />
             <img src={require("./images/nodejs.png")} className="logo"/>
             <br />
             <b>RUNTIME ENVIRONMENT</b>
+            <p style={{color: 'rgba(66, 133, 244, 1)', fontWeight: '700'}}>BACKEND JS PLATFORM</p>
           </div>
           <div className="logo-item">
             <b>REACT.JS</b>
+            <br />
             <img src={require("./images/reactjs.png")} className="logo"/>
             <br />
             <b>FRONTEND JS LIBRARY</b> 
@@ -42,6 +45,7 @@ class Home extends Component {
           </div>
           <div className="logo-item">
             <b>CHART.JS</b>
+            <br />
             <img src={require("./images/chartjs.png")} className="logo"/>
             <br />
             <b>FRONTEND JS LIBRARY</b>
@@ -53,9 +57,11 @@ class Home extends Component {
         <br />
         <br />
 
-        <p style={{ textAlign: "center" }}>The source code can be found here: </p>
-
+        <p style={{ textAlign: "center", fontSize: '16px', }}>The source code can be found here: <a style={{color: 'rgba(66, 133, 244, 1)'}} href="https://github.com/nbhdginseng/nbhdginseng.github.io">Github Repository</a></p>
+        
+        
       </div>
+      
     );
   }
 }
