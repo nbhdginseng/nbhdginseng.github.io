@@ -1,0 +1,13 @@
+improvements
+
+[DONE] calculate minimum speed, set as lower bound for slider values
+- label custom coordinate 
+- ability to fix grid
+- hash???
+- flex elements so they align horizonally 
+
+for (let j = 0; j < t_arr.length; j++) {
+    let t_val = t_arr[j];
+
+    
+for (let t_val of t_arr) {
